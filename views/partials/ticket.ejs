@@ -1,0 +1,26 @@
+<%# Comanda: tarjeta con los datos de un pedido. Variables: pedido, volver, mostrarAcciones %>
+<article class="ticket estado-<%= pedido.estado %>">
+  <header class="ticket-cabecera">
+    <div class="ticket-mesa"><span>Mesa</span><strong><%= pedido.mesa %></strong></div>
+    <div class="ticket-datos">
+      <span class="etiqueta etiqueta-<%= pedido.estado %>"><%= etiquetaEstado(pedido.estado) %></span>
+      <span>Pedido #<%= pedido.id_pedido %> · <%= hora(pedido.fecha_hora) %> (<%= minutosDesde(pedido.fecha_hora) %> min)</span>
+      <span>Atiende: <%= pedido.mesero %></span>
+    </div>
+  </header>
+  <ul class="ticket-lineas">
+    <% pedido.detalles.forEach((d) => { %>
+      <li>
+        <span class="cant"><%= d.cantidad %>×</span>
+        <span class="plato-nombre"><%= d.nombre %>
+          <% if (d.observacion) { %><em class="nota"><%= d.observacion %></em><% } %>
+        </span>
+        <span class="importe"><%= bs(d.subtotal) %></span>
+      </li>
+    <% }) %>
+  </ul>
+  <footer class="ticket-pie">
+    <strong>Total <%= bs(pedido.total) %></strong>
+    <% if (mostrarAcciones) { %><%- include('acciones', { pedido, volver }) %><% } %>
+  </footer>
+</article>

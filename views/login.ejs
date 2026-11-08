@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar · RestoGest</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="pagina-login">
+  <main class="login">
+    <h1 class="marca-grande">RestoGest</h1>
+    <p class="subtitulo">Pedidos, cocina y caja en un solo lugar.</p>
+    <form class="formulario" method="post" action="/login">
+      <% if (error) { %><p class="aviso aviso-error" role="alert"><%= error %></p><% } %>
+      <label>Correo
+        <input type="email" name="email" value="<%= email %>" autocomplete="username" required autofocus>
+      </label>
+      <label>Contraseña
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button class="btn btn-primario btn-ancho" type="submit">Ingresar</button>
+    </form>
+  </main>
+</body>
+</html>

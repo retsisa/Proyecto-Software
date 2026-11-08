@@ -1,0 +1,27 @@
+<%- include('partials/header', { titulo: 'Caja' }) %>
+<h1>Caja</h1>
+<p class="subtitulo">Pedidos listos o entregados, pendientes de cobro.</p>
+<% if (pedidos.length === 0) { %>
+  <section class="vacio"><p>No hay pedidos por cobrar.</p></section>
+<% } %>
+<div class="tickets">
+  <% pedidos.forEach((pedido) => { %>
+    <div class="cobro-bloque">
+      <%- include('partials/ticket', { pedido, volver: '/cobro', mostrarAcciones: false }) %>
+      <form class="formulario cobro-form" method="post" action="/pagos">
+        <input type="hidden" name="idPedido" value="<%= pedido.id_pedido %>">
+        <label>Método de pago
+          <select name="metodo" class="metodo">
+            <% metodos.forEach((m) => { %><option value="<%= m %>"><%= m === 'qr' ? 'QR' : m.charAt(0).toUpperCase() + m.slice(1) %></option><% }) %>
+          </select>
+        </label>
+        <label class="campo-recibido">Monto recibido (Bs)
+          <input type="number" name="recibido" step="0.01" min="0" value="<%= Number(pedido.total).toFixed(2) %>">
+        </label>
+        <button class="btn btn-primario btn-ancho" type="submit">Cobrar <%= bs(pedido.total) %></button>
+      </form>
+    </div>
+  <% }) %>
+</div>
+<script src="/js/cobro.js"></script>
+<%- include('partials/footer') %>

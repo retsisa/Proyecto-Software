@@ -1,0 +1,40 @@
+<%- include('partials/header', { titulo: 'Usuarios' }) %>
+<h1>Usuarios</h1>
+<p class="subtitulo">Personal con acceso al sistema.</p>
+
+<form class="formulario formulario-fila" method="post" action="/usuarios">
+  <h2>Nuevo usuario</h2>
+  <label>Nombre <input name="nombre" maxlength="60" required></label>
+  <label>Apellido <input name="apellido" maxlength="60" required></label>
+  <label>Correo <input type="email" name="email" maxlength="100" required></label>
+  <label>Contraseña <input type="password" name="password" minlength="6" required autocomplete="new-password"></label>
+  <label>Rol
+    <select name="idRol"><% roles.forEach((r) => { %><option value="<%= r.id_rol %>"><%= r.nombre %></option><% }) %></select>
+  </label>
+  <button class="btn btn-primario" type="submit">Crear usuario</button>
+</form>
+
+<div class="tabla-envoltorio">
+<table class="tabla">
+  <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+    <% usuarios.forEach((u) => { %>
+      <tr class="<%= u.activo ? '' : 'inactivo' %>">
+        <td><%= u.nombre %> <%= u.apellido %></td>
+        <td><%= u.email %></td>
+        <td><%= u.rol %></td>
+        <td><%= u.activo ? 'Activo' : 'Inactivo' %></td>
+        <td>
+          <% if (u.id_usuario !== usuario.id) { %>
+            <form method="post" action="/usuarios/<%= u.id_usuario %>/activo">
+              <input type="hidden" name="activo" value="<%= u.activo ? 'false' : 'true' %>">
+              <button class="btn btn-claro btn-chico" type="submit"><%= u.activo ? 'Desactivar' : 'Activar' %></button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
+<%- include('partials/footer') %>

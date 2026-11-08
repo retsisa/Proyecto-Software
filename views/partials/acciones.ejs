@@ -1,0 +1,21 @@
+<%
+  // Botones para cambiar el estado de un pedido, según su estado actual y el rol de quien lo ve.
+  const ACCIONES = {
+    pendiente: [['en_preparacion', 'Empezar a preparar', ['cocina', 'administrador'], 'btn-primario'], ['cancelado', 'Cancelar pedido', ['mesero', 'administrador'], 'btn-peligro']],
+    en_preparacion: [['listo', 'Marcar listo', ['cocina', 'administrador'], 'btn-primario']],
+    listo: [['entregado', 'Marcar entregado', ['mesero', 'administrador'], 'btn-primario']],
+    entregado: []
+  };
+  const botones = (ACCIONES[pedido.estado] || []).filter((a) => a[2].includes(usuario.rol));
+%>
+<% if (botones.length) { %>
+  <div class="acciones">
+    <% botones.forEach(([estado, texto, , clase]) => { %>
+      <form method="post" action="/pedidos/<%= pedido.id_pedido %>/estado" <%- estado === 'cancelado' ? 'onsubmit="return confirm(\'¿Cancelar este pedido?\')"' : '' %>>
+        <input type="hidden" name="estado" value="<%= estado %>">
+        <input type="hidden" name="volver" value="<%= volver %>">
+        <button class="btn <%= clase %>" type="submit"><%= texto %></button>
+      </form>
+    <% }) %>
+  </div>
+<% } %>

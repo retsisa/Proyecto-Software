@@ -1,0 +1,12 @@
+<%- include('partials/header', { titulo: 'Pedidos' }) %>
+<h1><%= usuario.rol === 'mesero' ? 'Mis pedidos' : 'Pedidos activos' %></h1>
+<p class="subtitulo">Pedidos que todavía no se han cobrado.</p>
+<% if (pedidos.length === 0) { %>
+  <section class="vacio"><p>No hay pedidos en curso.</p><a class="btn btn-primario" href="/mesas">Tomar un pedido</a></section>
+<% } %>
+<div class="tickets">
+  <% pedidos.forEach((pedido) => { %>
+    <%- include('partials/ticket', { pedido, volver: '/pedidos', mostrarAcciones: true }) %>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

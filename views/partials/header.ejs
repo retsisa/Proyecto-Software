@@ -1,0 +1,34 @@
+<%
+  const MENU = {
+    administrador: [['/mesas','Mesas'],['/pedidos','Pedidos'],['/cocina','Cocina'],['/cobro','Caja'],['/menu','Menú'],['/reportes','Reportes'],['/usuarios','Usuarios']],
+    mesero: [['/mesas','Mesas'],['/pedidos','Mis pedidos']],
+    cocina: [['/cocina','Cocina']],
+    caja: [['/cobro','Caja']]
+  };
+  const enlaces = usuario ? (MENU[usuario.rol] || []) : [];
+%><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof titulo !== 'undefined' ? titulo + ' · ' : '' %>RestoGest</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+<header class="barra">
+  <a class="marca" href="/dashboard">RestoGest</a>
+  <nav aria-label="Principal">
+    <% enlaces.forEach(([href, texto]) => { %>
+      <a href="<%= href %>" <%- ruta === href || ruta.startsWith(href + '/') ? 'aria-current="page"' : '' %>><%= texto %></a>
+    <% }) %>
+  </nav>
+  <% if (usuario) { %>
+    <form class="sesion" method="post" action="/logout">
+      <span><%= usuario.nombre %> · <%= usuario.rol %></span>
+      <button class="btn btn-claro btn-chico" type="submit">Salir</button>
+    </form>
+  <% } %>
+</header>
+<main class="contenedor">
+<% if (ok) { %><p class="aviso aviso-ok" role="status"><%= ok %></p><% } %>
+<% if (err) { %><p class="aviso aviso-error" role="alert"><%= err %></p><% } %>

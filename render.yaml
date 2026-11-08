@@ -1,0 +1,16 @@
+# Opcional: despliegue en Render con "Blueprint". También se puede crear el servicio a mano (ver README).
+services:
+  - type: web
+    name: restogest
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /salud
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false        # se pega en el panel de Render (cadena de conexión de Neon)
+      - key: JWT_SECRET
+        generateValue: true

@@ -1,0 +1,32 @@
+<%- include('partials/header', { titulo: 'Mesas' }) %>
+<h1>Mesas</h1>
+<p class="subtitulo">Toca una mesa para tomar o ampliar su pedido.</p>
+
+<div class="mesas">
+  <% mesas.forEach((m) => { %>
+    <section class="mesa mesa-<%= m.estado %>">
+      <div class="mesa-numero"><%= m.numero %></div>
+      <p><%= m.capacidad %> personas · <span class="etiqueta etiqueta-<%= m.estado %>"><%= m.estado %></span></p>
+      <div class="acciones">
+        <% if (m.estado !== 'reservada') { %>
+          <a class="btn btn-primario" href="/pedidos/nuevo/<%= m.id_mesa %>"><%= m.estado === 'ocupada' ? 'Agregar pedido' : 'Tomar pedido' %></a>
+        <% } %>
+        <% if (m.estado !== 'ocupada') { %>
+          <form method="post" action="/mesas/<%= m.id_mesa %>/reservar">
+            <button class="btn btn-claro" type="submit"><%= m.estado === 'libre' ? 'Reservar' : 'Quitar reserva' %></button>
+          </form>
+        <% } %>
+      </div>
+    </section>
+  <% }) %>
+</div>
+
+<% if (usuario.rol === 'administrador') { %>
+  <form class="formulario formulario-fila" method="post" action="/mesas">
+    <h2>Agregar mesa</h2>
+    <label>Número <input type="number" name="numero" min="1" required></label>
+    <label>Capacidad <input type="number" name="capacidad" min="1" required></label>
+    <button class="btn btn-primario" type="submit">Crear mesa</button>
+  </form>
+<% } %>
+<%- include('partials/footer') %>

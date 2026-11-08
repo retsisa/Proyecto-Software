@@ -1,0 +1,61 @@
+<%- include('partials/header', { titulo: 'Menú' }) %>
+<h1>Menú</h1>
+<p class="subtitulo">Los platos desactivados no aparecen al tomar pedidos.</p>
+
+<div class="dos-columnas">
+  <form class="formulario" method="post" action="/menu/platos">
+    <h2>Nuevo plato</h2>
+    <label>Nombre <input name="nombre" maxlength="80" required></label>
+    <label>Categoría
+      <select name="idCategoria" required>
+        <% categorias.forEach((c) => { %><option value="<%= c.id_categoria %>"><%= c.nombre %></option><% }) %>
+      </select>
+    </label>
+    <label>Precio (Bs) <input name="precio" type="number" step="0.01" min="0.01" required></label>
+    <label>Descripción <input name="descripcion" maxlength="200"></label>
+    <button class="btn btn-primario" type="submit">Agregar plato</button>
+  </form>
+  <form class="formulario" method="post" action="/menu/categorias">
+    <h2>Nueva categoría</h2>
+    <label>Nombre <input name="nombre" maxlength="50" required></label>
+    <button class="btn btn-primario" type="submit">Crear categoría</button>
+  </form>
+</div>
+
+<div class="tabla-envoltorio">
+<table class="tabla">
+  <thead><tr><th>Plato</th><th>Categoría</th><th class="num">Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+  <tbody>
+    <% platos.forEach((p) => { %>
+      <tr class="<%= p.disponible ? '' : 'inactivo' %>">
+        <td><strong><%= p.nombre %></strong><br><small><%= p.descripcion || '' %></small></td>
+        <td><%= p.categoria %></td>
+        <td class="num"><%= bs(p.precio) %></td>
+        <td><%= p.disponible ? 'Disponible' : 'No disponible' %></td>
+        <td>
+          <div class="acciones">
+            <form method="post" action="/menu/platos/<%= p.id_plato %>/disponibilidad">
+              <button class="btn btn-claro btn-chico" type="submit"><%= p.disponible ? 'Desactivar' : 'Activar' %></button>
+            </form>
+            <details class="editar">
+              <summary class="btn btn-claro btn-chico">Editar</summary>
+              <form class="formulario" method="post" action="/menu/platos/<%= p.id_plato %>/editar">
+                <label>Nombre <input name="nombre" value="<%= p.nombre %>" maxlength="80" required></label>
+                <label>Categoría
+                  <select name="idCategoria">
+                    <% categorias.forEach((c) => { %><option value="<%= c.id_categoria %>" <%= c.id_categoria === p.id_categoria ? 'selected' : '' %>><%= c.nombre %></option><% }) %>
+                  </select>
+                </label>
+                <label>Precio (Bs) <input name="precio" type="number" step="0.01" min="0.01" value="<%= p.precio %>" required></label>
+                <label>Descripción <input name="descripcion" value="<%= p.descripcion || '' %>" maxlength="200"></label>
+                <button class="btn btn-primario btn-chico" type="submit">Guardar cambios</button>
+              </form>
+            </details>
+          </div>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,12 @@
+<%- include('partials/header', { titulo: 'Inicio' }) %>
+<h1>Hola, <%= usuario.nombre %></h1>
+<p class="subtitulo">Elige por dónde empezar.</p>
+<div class="accesos">
+  <% accesos.forEach((a) => { %>
+    <a class="acceso" href="<%= a.href %>">
+      <strong><%= a.titulo %></strong>
+      <span><%= a.texto %></span>
+    </a>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

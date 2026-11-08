@@ -1,0 +1,42 @@
+<%- include('partials/header', { titulo: 'Nuevo pedido' }) %>
+<h1>Mesa <%= mesa.numero %></h1>
+<p class="subtitulo">Suma los platos y envía el pedido a cocina.</p>
+
+<div class="toma" id="toma" data-mesa="<%= mesa.id_mesa %>">
+  <div class="toma-menu">
+    <% if (categorias.length === 0) { %>
+      <p class="vacio">No hay platos disponibles. Pide al administrador que active platos en el menú.</p>
+    <% } %>
+    <% categorias.forEach((c) => { %>
+      <section>
+        <h2><%= c.nombre %></h2>
+        <% c.platos.forEach((p) => { %>
+          <div class="plato" data-id="<%= p.id_plato %>" data-nombre="<%= p.nombre %>" data-precio="<%= p.precio %>">
+            <div class="plato-info">
+              <strong><%= p.nombre %></strong>
+              <% if (p.descripcion) { %><span><%= p.descripcion %></span><% } %>
+              <span class="precio"><%= bs(p.precio) %></span>
+            </div>
+            <div class="cantidad">
+              <button type="button" class="btn btn-claro" data-accion="menos" aria-label="Quitar uno de <%= p.nombre %>">−</button>
+              <output aria-live="polite">0</output>
+              <button type="button" class="btn btn-primario" data-accion="mas" aria-label="Agregar uno de <%= p.nombre %>">+</button>
+            </div>
+            <input class="nota-plato" type="text" maxlength="200" placeholder="Nota para cocina (sin cebolla, poco picante…)" hidden>
+          </div>
+        <% }) %>
+      </section>
+    <% }) %>
+  </div>
+
+  <aside class="resumen" aria-label="Resumen del pedido">
+    <h2>Pedido</h2>
+    <ul id="lineas" class="resumen-lineas"><li class="vacio-texto">Aún no hay platos.</li></ul>
+    <p class="resumen-total">Total <strong id="total">Bs 0.00</strong></p>
+    <p class="aviso aviso-error" id="error" role="alert" hidden></p>
+    <button class="btn btn-primario btn-ancho" id="enviar" type="button" disabled>Enviar a cocina</button>
+    <a class="btn btn-claro btn-ancho" href="/mesas">Volver a mesas</a>
+  </aside>
+</div>
+<script src="/js/pedido.js"></script>
+<%- include('partials/footer') %>

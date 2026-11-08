@@ -1,0 +1,61 @@
+<%- include('partials/header', { titulo: 'Reportes' }) %>
+<h1>Reportes</h1>
+<form class="formulario formulario-fila" method="get" action="/reportes">
+  <label>Desde <input type="date" name="desde" value="<%= desde %>"></label>
+  <label>Hasta <input type="date" name="hasta" value="<%= hasta %>"></label>
+  <button class="btn btn-primario" type="submit">Ver reporte</button>
+</form>
+
+<div class="indicadores">
+  <div><span>Ventas del periodo</span><strong><%= bs(totalPeriodo) %></strong></div>
+  <div><span>Pedidos cobrados</span><strong><%= totalPedidos %></strong></div>
+  <div><span>Ticket promedio</span><strong><%= bs(totalPedidos ? totalPeriodo / totalPedidos : 0) %></strong></div>
+</div>
+
+<%
+  const maxVenta = Math.max(1, ...ventas.map((v) => Number(v.total)));
+  const maxUnid = Math.max(1, ...platos.map((p) => p.unidades));
+  const fecha = (d) => new Date(d).toLocaleDateString('es-BO', { timeZone: 'UTC', weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+%>
+<div class="dos-columnas">
+  <section>
+    <h2>Ventas por día</h2>
+    <% if (ventas.length === 0) { %><p class="vacio-texto">No hay ventas en este periodo.</p><% } %>
+    <ul class="barras">
+      <% ventas.forEach((v) => { %>
+        <li>
+          <span class="barra-etiqueta"><%= fecha(v.dia) %></span>
+          <span class="barra"><i style="width: <%= (Number(v.total) / maxVenta * 100).toFixed(1) %>%"></i></span>
+          <span class="barra-valor"><%= bs(v.total) %> · <%= v.pedidos %> ped.</span>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+  <section>
+    <h2>Platos más vendidos</h2>
+    <% if (platos.length === 0) { %><p class="vacio-texto">Todavía no hay datos.</p><% } %>
+    <ul class="barras">
+      <% platos.forEach((p) => { %>
+        <li>
+          <span class="barra-etiqueta"><%= p.nombre %></span>
+          <span class="barra"><i style="width: <%= (p.unidades / maxUnid * 100).toFixed(1) %>%"></i></span>
+          <span class="barra-valor"><%= p.unidades %> u. · <%= bs(p.ingresos) %></span>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+</div>
+
+<section>
+  <h2>Por método de pago</h2>
+  <div class="tabla-envoltorio">
+    <table class="tabla">
+      <thead><tr><th>Método</th><th class="num">Pedidos</th><th class="num">Total</th></tr></thead>
+      <tbody>
+        <% metodos.forEach((m) => { %><tr><td><%= m.metodo %></td><td class="num"><%= m.pedidos %></td><td class="num"><%= bs(m.total) %></td></tr><% }) %>
+        <% if (metodos.length === 0) { %><tr><td colspan="3">Sin pagos en este periodo.</td></tr><% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>

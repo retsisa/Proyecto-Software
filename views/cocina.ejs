@@ -1,0 +1,14 @@
+<%- include('partials/header', { titulo: 'Cocina' }) %>
+<h1>Cocina</h1>
+<p class="subtitulo">Del más antiguo al más reciente. La pantalla se actualiza sola cuando llega un pedido.</p>
+<div id="datos-cocina" data-ultimo="<%= ultimo %>" hidden></div>
+<% if (pedidos.length === 0) { %>
+  <section class="vacio"><p>No hay pedidos por preparar.</p></section>
+<% } %>
+<div class="tickets">
+  <% pedidos.forEach((pedido) => { %>
+    <%- include('partials/ticket', { pedido, volver: '/cocina', mostrarAcciones: true }) %>
+  <% }) %>
+</div>
+<script src="/js/cocina.js"></script>
+<%- include('partials/footer') %>

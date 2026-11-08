@@ -1,0 +1,18 @@
+<%- include('partials/header', { titulo: 'Comprobante' }) %>
+<section class="comprobante">
+  <h1>RestoGest</h1>
+  <p>Comprobante de pago · Pedido #<%= pedido.id_pedido %></p>
+  <p>Mesa <%= pedido.mesa %> · <%= fechaHora(pedido.fecha_pago) %></p>
+  <ul class="ticket-lineas">
+    <% pedido.detalles.forEach((d) => { %>
+      <li><span class="cant"><%= d.cantidad %>×</span><span class="plato-nombre"><%= d.nombre %></span><span class="importe"><%= bs(d.subtotal) %></span></li>
+    <% }) %>
+  </ul>
+  <p class="resumen-total">Total <strong><%= bs(pedido.total) %></strong></p>
+  <p>Pagado con: <%= pedido.metodo %></p>
+  <div class="acciones sin-imprimir">
+    <button class="btn btn-primario" type="button" onclick="window.print()">Imprimir</button>
+    <a class="btn btn-claro" href="/cobro">Volver a caja</a>
+  </div>
+</section>
+<%- include('partials/footer') %>

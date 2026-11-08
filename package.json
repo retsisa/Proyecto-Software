@@ -1,0 +1,23 @@
+{
+  "name": "restogest",
+  "version": "1.0.0",
+  "description": "RestoGest: sistema web de gestión de pedidos para restaurante (Ingeniería de Software, Fase II)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "db:init": "node scripts/initDb.js",
+    "admin:crear": "node scripts/crearAdmin.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0"
+  }
+}
